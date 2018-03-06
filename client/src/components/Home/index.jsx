@@ -17,8 +17,10 @@ class Home extends Component {
 
    async componentDidMount() {
     const id = localStorage.getItem('id');
-    const { data } = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`)
-    this.setState({ allChallenges: data.rows });
+    const { data } = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
+    if (data.rows.length) {
+      this.setState({ allChallenges: data.rows, selectedChallenge: data.rows[0] });
+    }
    }
 
   randomSlingId = () => {
