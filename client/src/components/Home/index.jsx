@@ -11,6 +11,8 @@ let slingId;
 
 class Home extends Component {
   state = {
+    allUsers: [],
+    selectedUser: {},
     allFriends: [],
     selectedFriend: {},
     allChallenges: [],
@@ -20,12 +22,19 @@ class Home extends Component {
   async componentDidMount() {
     const id = localStorage.getItem('id');
     var { data } = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
-    if (data.rows.length) {
+    if (data && data.rows.length) {
       this.setState({ allChallenges: data.rows, selectedChallenge: data.rows[0] });
     }
 
+    var { data } = await axios.get(`http://localhost:3396/api/users/fetchAllUsers`);
+    if (data && data.rows.length) {
+      this.setState({ allUsers: data.rows, selectedChallenge: data.rows[0] });
+    }
+
     var { data } = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
-    console.log(data);
+    if (data && data.rows.length) {
+      this.setState({ allFriends: data.rows, selectedFriend: data.rows[0] });
+    }
   }
 
   randomSlingId = () => {
@@ -58,6 +67,12 @@ class Home extends Component {
     this.setState({ selectedFriend: value });
   }
 
+  handleUserSelect = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    this.setState({ selectedUser: value });
+  }
+
   render() {
     return (
       <div className="landing-page-container">
@@ -65,6 +80,26 @@ class Home extends Component {
           className="landing-page-logo"
         />
         <br />
+        Users:
+        <select onChange={(e) => this.handleUserSelect(e)}>
+          {this.state.allUsers.map(user => {
+            return (
+            <option
+              value={JSON.stringify(user)}
+            >
+              {user.username}
+            </option>)
+          }
+          )}
+        </select>
+        <Button
+          backgroundColor="red"
+          color="white"
+          text="Add Friend"
+          onClick={() => this.handleAddFriendClick()}
+        />
+        <br />
+        Friends:
         <select onChange={(e) => this.handleFriendSelect(e)}>
           {this.state.allFriends.map(friend => {
             return (
@@ -77,6 +112,8 @@ class Home extends Component {
           )}
         </select>
         <br />
+        <br />
+        Challenges:
         <select onChange={(e) => this.handleChallengeSelect(e)}>
           {this.state.allChallenges.map(challenge => {
             return (
