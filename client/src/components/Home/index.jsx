@@ -21,19 +21,43 @@ class Home extends Component {
 
   async componentDidMount() {
     const id = localStorage.getItem('id');
-    var { data } = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
-    if (data && data.rows.length) {
-      this.setState({ allChallenges: data.rows, selectedChallenge: data.rows[0] });
-    }
-
-    var { data } = await axios.get(`http://localhost:3396/api/users/fetchAllUsers`);
-    if (data && data.rows.length) {
-      this.setState({ allUsers: data.rows, selectedChallenge: data.rows[0] });
-    }
-
-    var { data } = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
-    if (data && data.rows.length) {
-      this.setState({ allFriends: data.rows, selectedFriend: data.rows[0] });
+    const challenges = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
+    const users = await axios.get('http://localhost:3396/api/users/fetchAllUsers');
+    const friends = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
+    
+    if (challenges.data && challenges.data.rows.length && users.data && users.data.rows.length && friends.data && friends.data.length) {
+      this.setState({
+        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
+        allUsers: users.data.rows, selectedUser: users.data.rows[0],
+        allFriends: friends.data, selectedFriend: friends.data[0]
+      });
+    } else if (challenges.data && challenges.data.rows.length && users.data && users.data.rows.length) {
+      this.setState({
+        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
+        allUsers: users.data.rows, selectedUser: users.data.rows[0]
+      });
+    } else if (challenges.data && challenges.data.rows.length && friends.data && friends.data.length) {
+      this.setState({
+        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
+        allFriends: friends.data, selectedFriend: friends.data[0]
+      });
+    } else if (users.data && users.data.rows.length && friends.data && friends.data.length) {
+      this.setState({
+        allUsers: users.data.rows, selectedUser: users.data.rows[0],
+        allFriends: friends.data, selectedFriend: friends.data[0]
+      });
+    } else if (challenges.data && challenges.data.rows.length) {
+      this.setState({
+        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0]
+      });
+    } else if (users.data && users.data.rows.length) {
+      this.setState({
+        allUsers: users.data.rows, selectedUser: users.data.rows[0]
+      });
+    } else if (friends.data && friends.data.length) {
+      this.setState({
+        allFriends: friends.data, selectedFriend: friends.data[0]
+      });
     }
   }
 
@@ -73,6 +97,24 @@ class Home extends Component {
     this.setState({ selectedUser: value });
   }
 
+  handleAddFriendClick = async () => {
+    try {
+      console.log(this.state.selectedUser);
+      await axios.post('http://localhost:3396/api/friends/addFriend',
+        { user_id: localStorage.getItem('id'), friend_id: this.state.selectedUser.id }
+      );
+      console.log(this.state.allFriends);
+      let friends = this.state.allFriends;
+      friends.push(this.state.selectedUser);
+      
+      this.setState({
+        allFriends: friends
+      });
+    } catch (err) {
+      console.log('failed');
+    }
+  }
+
   render() {
     return (
       <div className="landing-page-container">
@@ -82,10 +124,11 @@ class Home extends Component {
         <br />
         Users:
         <select onChange={(e) => this.handleUserSelect(e)}>
-          {this.state.allUsers.map(user => {
+          {this.state.allUsers.map((user, i) => {
             return (
             <option
               value={JSON.stringify(user)}
+              key={i}
             >
               {user.username}
             </option>)
@@ -101,10 +144,11 @@ class Home extends Component {
         <br />
         Friends:
         <select onChange={(e) => this.handleFriendSelect(e)}>
-          {this.state.allFriends.map(friend => {
+          {this.state.allFriends.map((friend, i) => {
             return (
             <option
               value={JSON.stringify(friend)}
+              key={i}
             >
               {friend.username}
             </option>)
@@ -115,10 +159,11 @@ class Home extends Component {
         <br />
         Challenges:
         <select onChange={(e) => this.handleChallengeSelect(e)}>
-          {this.state.allChallenges.map(challenge => {
+          {this.state.allChallenges.map((challenge, i) => {
             return (
             <option
               value={JSON.stringify(challenge)}
+              key={i}
             >
               {challenge.title}
             </option>)
