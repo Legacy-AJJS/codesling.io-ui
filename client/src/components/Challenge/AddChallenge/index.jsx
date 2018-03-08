@@ -11,19 +11,21 @@ class AddChallenge extends Component {
   state = { 
     title: '',
     content: '',
+    testCase: '',
     difficulty: null
    }
 
   submitChallenge = async (e) => {
     e.preventDefault();
-    const { title, content, difficulty } = this.state;
+    const { title, content, difficulty, testCase } = this.state;
     const id = localStorage.getItem('id');
     const body = {
       title,
       content,
       difficulty,
       user_id: id,
-      type: 0
+      type: 0,
+      testCase
     }
     const result = await axios.post('http://localhost:3396/api/challenges', body);
     this.props.history.push('/home');
@@ -57,6 +59,12 @@ class AddChallenge extends Component {
             name='difficulty'
             type='difficulty'
             placeholder={'enter your difficulty'}
+            onChange={this.handleChallengeInput}
+            />
+          <textarea 
+            name='testCase'
+            type='testCase'
+            placeholder={'enter expected output'}
             onChange={this.handleChallengeInput}
             />
           <Button
