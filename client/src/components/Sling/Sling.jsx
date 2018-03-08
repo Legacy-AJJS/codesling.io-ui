@@ -62,7 +62,8 @@ class Sling extends Component {
     const { socket } = this.props;
     const { ownerText } = this.state;
     const email = localStorage.getItem('email');
-    socket.emit('client.run', { text: ownerText, email });
+    const challengeId = this.state.challenge.id;
+    socket.emit('client.run', { text: ownerText, email, challengeId });
   }
 
   handleChange = throttle((editor, metadata, value) => {
@@ -105,6 +106,13 @@ class Sling extends Component {
             className="run-btn"
             text="Run Code"
             backgroundColor="red"
+            color="white"
+            onClick={() => this.submitCode()}
+          />
+          <Button
+            className="run-btn"
+            text="Submit Code"
+            backgroundColor="green"
             color="white"
             onClick={() => this.submitCode()}
           />
