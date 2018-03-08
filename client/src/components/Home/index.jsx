@@ -94,7 +94,8 @@ class Home extends Component {
   handleUserSelect = (e) => {
     e.preventDefault();
     const { value } = e.target;
-    this.setState({ selectedUser: value });
+    this.setState({ selectedUser: JSON.parse(value) });
+    console.log(this.state.selectedUser);
   }
 
   handleAddFriendClick = async () => {
