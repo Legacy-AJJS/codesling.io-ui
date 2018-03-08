@@ -27,7 +27,8 @@ class Home extends Component {
     const friends = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
 
     if (challenges.data && challenges.data.rows.length) {
-      this.setState({ allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0] });
+      // this.setState({ allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0] });
+      var allChallenges = challenges.data.rows;
     }
 
     if (users.data && users.data.rows.length) {
@@ -35,7 +36,22 @@ class Home extends Component {
     }
     
     if (friends.data && friends.data.length) {
-      this.setState({ allFriends: friends.data, selectedFriend: friends.data[0] });
+      var allChallenges = allChallenges || [];
+      
+      for (let i = 0; i < friends.data.length; i++) {
+        let friendChallenges = await axios.get(`http://localhost:3396/api/usersChallenges/${friends.data[i].id}`);
+        
+        if (friendChallenges.data && friendChallenges.data.rows.length) {
+          allChallenges = allChallenges.concat(friendChallenges.data.rows);
+        }
+      }
+
+      this.setState({
+        allFriends: friends.data,
+        selectedFriend: friends.data[0],
+        allChallenges: allChallenges,
+        selectedChallenge: allChallenges[0]
+      });
     }
   }
 
