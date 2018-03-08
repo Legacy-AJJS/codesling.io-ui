@@ -84,7 +84,7 @@ class Sling extends Component {
     const { socket } = this.props;
     return (
       <div className="sling-container">
-        <EditorHeader />
+        <EditorHeader goToHome={this.props.goToHome} />
         <div className="code1-editor-container">
           <CodeMirror
             editorDidMount={this.initializeEditor}

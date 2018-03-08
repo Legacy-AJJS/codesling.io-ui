@@ -5,10 +5,10 @@ import EditorNavbar from './EditorNavbar';
 
 import './EditorHeader.css';
 
-const EditorHeader = () => (
+const EditorHeader = ({goToHome}) => (
   <div className="editor-header">
     <div className="logo-container">
-      <Logo />
+      <Logo goToHome={goToHome} />
     </div>
     <div className="navbar-container">
       <EditorNavbar />

@@ -18,14 +18,18 @@ class SlingIndex extends Component {
     this.setState({ socket: this.socket });
   }
 
+  goToHome() {
+    this.props.history.push('/home');
+  }
+
   render() {
     if (this.props.location.state) {
       return (
-        <Sling socket={this.state.socket} challenge={this.props.location.state.challenge}/>
+        <Sling goToHome={this.goToHome.bind(this)} socket={this.state.socket} challenge={this.props.location.state.challenge}/>
       );
     } else {
       return (
-        <Sling socket={this.state.socket} challenge={{}}/>
+        <Sling goToHome={this.goToHome.bind(this)} socket={this.state.socket} challenge={{}}/>
       );
     }
   }

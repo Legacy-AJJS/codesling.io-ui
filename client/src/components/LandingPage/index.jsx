@@ -9,11 +9,7 @@ class LandingPage extends Component {
   state = { 
     loading: false
    }
-
-  //  handleClick = () => {
-     
-  //  }
-
+   
   render() {
     return (
       <div className="landing-page-container">
