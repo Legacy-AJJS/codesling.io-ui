@@ -95,16 +95,14 @@ class Home extends Component {
     e.preventDefault();
     const { value } = e.target;
     this.setState({ selectedUser: JSON.parse(value) });
-    console.log(this.state.selectedUser);
   }
 
   handleAddFriendClick = async () => {
     try {
-      console.log(this.state.selectedUser);
       await axios.post('http://localhost:3396/api/friends/addFriend',
         { user_id: localStorage.getItem('id'), friend_id: this.state.selectedUser.id }
       );
-      console.log(this.state.allFriends);
+      
       let friends = this.state.allFriends;
       friends.push(this.state.selectedUser);
       
@@ -112,7 +110,7 @@ class Home extends Component {
         allFriends: friends
       });
     } catch (err) {
-      console.log('failed');
+      alert('Failed to add friend.');
     }
   }
 
