@@ -21,43 +21,21 @@ class Home extends Component {
 
   async componentDidMount() {
     const id = localStorage.getItem('id');
+    
     const challenges = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
     const users = await axios.get('http://localhost:3396/api/users/fetchAllUsers');
     const friends = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
+
+    if (challenges.data && challenges.data.rows.length) {
+      this.setState({ allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0] });
+    }
+
+    if (users.data && users.data.rows.length) {
+      this.setState({ allUsers: users.data.rows, selectedUser: users.data.rows[0] });
+    }
     
-    if (challenges.data && challenges.data.rows.length && users.data && users.data.rows.length && friends.data && friends.data.length) {
-      this.setState({
-        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
-        allUsers: users.data.rows, selectedUser: users.data.rows[0],
-        allFriends: friends.data, selectedFriend: friends.data[0]
-      });
-    } else if (challenges.data && challenges.data.rows.length && users.data && users.data.rows.length) {
-      this.setState({
-        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
-        allUsers: users.data.rows, selectedUser: users.data.rows[0]
-      });
-    } else if (challenges.data && challenges.data.rows.length && friends.data && friends.data.length) {
-      this.setState({
-        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0],
-        allFriends: friends.data, selectedFriend: friends.data[0]
-      });
-    } else if (users.data && users.data.rows.length && friends.data && friends.data.length) {
-      this.setState({
-        allUsers: users.data.rows, selectedUser: users.data.rows[0],
-        allFriends: friends.data, selectedFriend: friends.data[0]
-      });
-    } else if (challenges.data && challenges.data.rows.length) {
-      this.setState({
-        allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0]
-      });
-    } else if (users.data && users.data.rows.length) {
-      this.setState({
-        allUsers: users.data.rows, selectedUser: users.data.rows[0]
-      });
-    } else if (friends.data && friends.data.length) {
-      this.setState({
-        allFriends: friends.data, selectedFriend: friends.data[0]
-      });
+    if (friends.data && friends.data.length) {
+      this.setState({ allFriends: friends.data, selectedFriend: friends.data[0] });
     }
   }
 
