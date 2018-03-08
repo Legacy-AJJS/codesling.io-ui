@@ -21,14 +21,13 @@ class Home extends Component {
 
   async componentDidMount() {
     const id = localStorage.getItem('id');
-    
+    let allChallenges = [];
     const challenges = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
     const users = await axios.get('http://localhost:3396/api/users/fetchAllUsers');
     const friends = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
 
     if (challenges.data && challenges.data.rows.length) {
-      // this.setState({ allChallenges: challenges.data.rows, selectedChallenge: challenges.data.rows[0] });
-      var allChallenges = challenges.data.rows;
+      allChallenges = challenges.data.rows;
     }
 
     if (users.data && users.data.rows.length) {
@@ -36,8 +35,6 @@ class Home extends Component {
     }
     
     if (friends.data && friends.data.length) {
-      var allChallenges = allChallenges || [];
-      
       for (let i = 0; i < friends.data.length; i++) {
         let friendChallenges = await axios.get(`http://localhost:3396/api/usersChallenges/${friends.data[i].id}`);
         
