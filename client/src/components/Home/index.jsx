@@ -45,6 +45,15 @@ class Home extends Component {
     this.setState({ selectedChallenge: value });
   }
 
+  handleLogoutClick = () => {
+    console.log(this.props)
+    axios.get(`http://localhost:3396/api/auth/logout`);
+    delete localStorage.email;
+    delete localStorage.id;
+    delete localStorage.token;
+    this.props.history.push('/');
+  }
+
   render() {
     return (
       <div className="landing-page-container">
@@ -77,6 +86,13 @@ class Home extends Component {
           color="white"
           text="Duel"
           onClick={() => this.handleDuelClick()}
+        />
+        <br />
+        <Button
+          backgroundColor="red"
+          color="white"
+          text="Logout"
+          onClick={() => this.handleLogoutClick()}
         />
       </div>
     );
