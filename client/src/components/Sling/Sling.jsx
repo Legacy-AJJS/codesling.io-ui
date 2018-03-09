@@ -22,11 +22,17 @@ class Sling extends Component {
       challengerText: null,
       text: '',
       challenge: '',
-      stdout: ''
+      stdout: '',
+      secondsElapsed: 0,
     }
   }
 
   componentDidMount() {
+    setInterval( () => {
+      this.setState({
+        secondsElapsed: this.state.secondsElapsed + 1
+      })}, 1000);
+
     const { socket, challenge } = this.props;
     const startChall = typeof challenge === 'string' ? JSON.parse(challenge) : {}
     socket.on('connect', () => {
@@ -58,12 +64,17 @@ class Sling extends Component {
     window.addEventListener('resize', this.setEditorSize);
   }
 
+  formatSeconds = (sec) => {
+    return `${Math.floor(sec/60)}:${('0' + (sec % 60)).slice(-2)}`
+  };
+
   submitCode = () => {
     const { socket } = this.props;
     const { ownerText } = this.state;
     const email = localStorage.getItem('email');
     const challengeId = this.state.challenge.id;
     socket.emit('client.run', { text: ownerText, email, challengeId });
+    clearInterval(this.state.secondsElapsed);
   }
 
   handleChange = throttle((editor, metadata, value) => {
@@ -84,6 +95,7 @@ class Sling extends Component {
     const { socket } = this.props;
     return (
       <div className="sling-container">
+        {this.formatSeconds(this.state.secondsElapsed)}
         <EditorHeader goToHome={this.props.goToHome} />
         <div className="code1-editor-container">
           <CodeMirror
