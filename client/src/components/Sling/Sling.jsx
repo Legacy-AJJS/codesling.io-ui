@@ -71,16 +71,34 @@ class Sling extends Component {
         // Alert user of win condition.
         if (lines[lines.length - 1] === 'SUCCESS') {
           alert('Congrats! You Win!');
+          postSingleHistoryEntry();
+          this.props.history.push('/')
         }
       }
-    });
 
+    });
     window.addEventListener('resize', this.setEditorSize);
   }
 
   formatSeconds = (sec) => {
     return `${Math.floor(sec/60)}:${('0' + (sec % 60)).slice(-2)}`
+    
   };
+
+  postSingleHistoryEntry = () => {
+    let body = { 
+                outcome: 1,
+                id: localStorage.id,  
+                time: this.state.secondsElapsed,
+                clout: 0,
+                user_id: this.props.challenge.id,
+                challenger_id: 0,
+                challenge_id: this.state.challenge.id
+                }
+    axios.post(`http://localhost:3396/api/addHistory`, body, () => {
+      console.log('stored');
+    });
+  }
 
   submitCode = () => {
     const { socket } = this.props;
@@ -106,6 +124,9 @@ class Sling extends Component {
   }
 
   render() {
+    //console.log(localStorage);
+     //console.log(this.state.challenge)
+    // console.log(this.props)
     const { socket } = this.props;
     return (
       <div className="sling-container">
