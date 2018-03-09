@@ -61,3 +61,4 @@ bundle.js
 bundle.js.map
 
 graveyard.js
+yarn.lock

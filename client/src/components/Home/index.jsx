@@ -25,7 +25,7 @@ class Home extends Component {
     const challenges = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`);
     const users = await axios.get('http://localhost:3396/api/users/fetchAllUsers');
     const friends = await axios.get(`http://localhost:3396/api/friends/fetchAllFriends/${id}`);
-
+    
     if (challenges.data && challenges.data.rows.length) {
       allChallenges = challenges.data.rows;
     }
@@ -42,14 +42,14 @@ class Home extends Component {
           allChallenges = allChallenges.concat(friendChallenges.data.rows);
         }
       }
-
-      this.setState({
-        allFriends: friends.data,
-        selectedFriend: friends.data[0],
-        allChallenges: allChallenges,
-        selectedChallenge: allChallenges[0]
-      });
     }
+
+    this.setState({
+      allFriends: friends.data,
+      selectedFriend: friends.data[0],
+      allChallenges: allChallenges,
+      selectedChallenge: allChallenges[0]
+    });
   }
 
   randomSlingId = () => {
