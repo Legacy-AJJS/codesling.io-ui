@@ -58,7 +58,21 @@ class Sling extends Component {
 
     socket.on('server.run', ({ stdout, email }) => {
       const ownerEmail = localStorage.getItem('email');
-      email === ownerEmail ? this.setState({ stdout }) : null;
+
+      if (email === ownerEmail) {
+        this.setState({ stdout });
+
+        // Take out empty new lines from console output.
+        const lines = stdout.split('\n');
+        lines.forEach((line, i) => {
+          if (line === '') lines.splice(i, 1);
+        });
+        console.log(lines);
+        // Alert user of win condition.
+        if (lines[lines.length - 1] === 'SUCCESS') {
+          alert('Congrats! You Win!');
+        }
+      }
     });
 
     window.addEventListener('resize', this.setEditorSize);
