@@ -11,13 +11,22 @@ class AddChallenge extends Component {
   state = { 
     title: '',
     content: '',
-    testCase: '',
+    input: '',
+    output: '',
     difficulty: null
    }
 
   submitChallenge = async (e) => {
+
     e.preventDefault();
-    const { title, content, difficulty, testCase } = this.state;
+    const { title, content, difficulty, input, output } = this.state;
+
+    // Concact input/output to create testCase
+    let testCase = [];
+    testCase.push(input);
+    testCase.push(output);
+    testCase = JSON.stringify(testCase);
+
     const id = localStorage.getItem('id');
     const body = {
       title,
@@ -61,9 +70,15 @@ class AddChallenge extends Component {
             placeholder={'enter your difficulty'}
             onChange={this.handleChallengeInput}
             />
-          <textarea 
-            name='testCase'
-            type='testCase'
+          <Input 
+            name='input'
+            type='input'
+            placeholder={'enter input'}
+            onChange={this.handleChallengeInput}
+            />
+          <Input 
+            name='output'
+            type='output'
             placeholder={'enter expected output'}
             onChange={this.handleChallengeInput}
             />
