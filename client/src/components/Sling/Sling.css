@@ -39,3 +39,9 @@
   background: #141414;
   padding: 5px;
   margin: 0 30px; }
+
+.fail {
+  color: red; }
+
+.pass {
+  color: green; }
