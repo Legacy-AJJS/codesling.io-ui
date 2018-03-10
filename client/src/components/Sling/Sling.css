@@ -41,7 +41,11 @@
   margin: 0 30px; }
 
 .fail {
-  color: red; }
+  font-weight: bold;
+  color: red; 
+}
 
 .pass {
-  color: green; }
+  font-weight: bold;
+  color: green; 
+}
