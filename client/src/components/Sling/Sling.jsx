@@ -173,7 +173,7 @@ class Sling extends Component {
 
       <div className="sling-container">
         <div>
-          <RaisedButton label="Modal Dialog" onClick={this.handleOpen} />
+          {/* <RaisedButton label="Modal Dialog" onClick={this.handleOpen} /> */}
           <Dialog
             title={this.state.endMessage}
             actions={actions}
@@ -207,13 +207,6 @@ class Sling extends Component {
             className="run-btn"
             text="Run Code"
             backgroundColor="red"
-            color="white"
-            onClick={() => this.submitCode()}
-          />
-          <Button
-            className="run-btn"
-            text="Submit Code"
-            backgroundColor="green"
             color="white"
             onClick={() => this.submitCode()}
           />
