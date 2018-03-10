@@ -125,7 +125,7 @@ class Home extends Component {
       <nav className="editor-navbar home-navbar">
         <ul>
           <li>History</li>
-          <li>Logout</li>
+          <li onClick={() => this.handleLogoutClick()}>Logout</li>
         </ul>
       </nav>
         <br />
@@ -142,8 +142,10 @@ class Home extends Component {
           }
           )}
         </select>
+        <br />
+        <br />
         <Button
-          backgroundColor="red"
+          backgroundColor="green"
           color="white"
           text="Add Friend"
           onClick={() => this.handleAddFriendClick()}
@@ -191,13 +193,6 @@ class Home extends Component {
           color="white"
           text="Duel"
           onClick={() => this.handleDuelClick()}
-        />
-        <br />
-        <Button
-          backgroundColor="red"
-          color="white"
-          text="Logout"
-          onClick={() => this.handleLogoutClick()}
         />
       </div>
     );

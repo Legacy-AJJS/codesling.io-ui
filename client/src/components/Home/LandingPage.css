@@ -9,6 +9,8 @@
   border-bottom: 3px solid whitesmoke;
 }
 
+li { cursor: pointer; }
+
 .auth-btn-container button {
   margin-bottom: 20px; }
   @media (min-width: 480px) {
