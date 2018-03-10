@@ -8,6 +8,10 @@ import Stdout from './StdOut/index.jsx';
 import EditorHeader from './EditorHeader';
 import Button from '../globals/Button';
 
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-dark.css';
@@ -24,6 +28,8 @@ class Sling extends Component {
       challenge: '',
       stdout: '',
       secondsElapsed: 0,
+      open: false,
+      endMessage: ''
     }
     this.postHistory.bind(this);
   }
@@ -76,9 +82,13 @@ class Sling extends Component {
 
       if (lines[lines.length - 1] === 'SUCCESS') {
         if (email === ownerEmail) {
-          alert('Congrats! You Win!')
+          // Render win message
+          this.setState({ endMessage: 'Congrats! You won!' });
+          this.setState({ open: true });
         } else {
           alert('Sorry, you lost!');
+          this.setState({ endMessage: 'Sorry, you list!' });
+          this.setState({ open: true });
           socket.emit('client.recordHistory', {
             challenge: this.state.challenge,
             winner: email, 
@@ -118,7 +128,6 @@ class Sling extends Component {
     const { ownerText } = this.state;
     const email = localStorage.getItem('email');
     const challengeId = this.state.challenge.id;
-    console.log(this.state.challenge);
     socket.emit('client.run', { text: ownerText, email, challengeId });
     clearInterval(this.state.secondsElapsed);
   }
@@ -137,10 +146,45 @@ class Sling extends Component {
     this.setEditorSize();
   }
 
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
   render() {
     const { socket } = this.props;
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        disabled={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
     return (
+
       <div className="sling-container">
+        <div>
+          <RaisedButton label="Modal Dialog" onClick={this.handleOpen} />
+          <Dialog
+            title={this.state.endMessage}
+            actions={actions}
+            modal={true}
+            open={this.state.open} >
+            Stay or navigate to home page.
+          </Dialog>
+        </div>
+
+
         {this.formatSeconds(this.state.secondsElapsed)}
         <EditorHeader goToHome={this.props.goToHome} />
         <div className="code1-editor-container">
