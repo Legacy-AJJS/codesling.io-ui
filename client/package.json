@@ -25,6 +25,7 @@
     "dotenv": "^4.0.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
+    "material-ui": "^0.20.0",
     "node-sass": "^4.7.2",
     "randomstring": "^1.1.5",
     "react": "^16.2.0",

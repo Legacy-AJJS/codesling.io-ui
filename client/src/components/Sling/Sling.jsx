@@ -52,7 +52,6 @@ class Sling extends Component {
 
 
     socket.on('server.changed', ({ text, email }) => {
-      console.log(email)
       if (localStorage.getItem('email') === email) {
         this.setState({ ownerText: text });
       } else {
