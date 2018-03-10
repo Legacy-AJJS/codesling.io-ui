@@ -3,7 +3,6 @@ import randomstring from 'randomstring';
 import axios from 'axios';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import EditorHeader from './EditorHeader';
 
 import Button from '../globals/Button';
 import Logo from '../globals/Logo';
