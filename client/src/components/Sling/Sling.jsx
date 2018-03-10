@@ -51,7 +51,6 @@ class Sling extends Component {
 
     
     socket.on('server.initialState', ({ id, text, challenge }) => {
-      console.log(challenge);
       this.setState({
         id,
         ownerText: text,
