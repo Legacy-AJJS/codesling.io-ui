@@ -5,13 +5,13 @@ import EditorNavbar from './EditorNavbar';
 
 import './EditorHeader.css';
 
-const EditorHeader = ({goToHome}) => (
+const EditorHeader = (props) => (
   <div className="editor-header">
     <div className="logo-container">
-      <Logo goToHome={goToHome} />
+      <Logo goToHome={props.goToHome} />
     </div>
     <div className="navbar-container">
-      <EditorNavbar />
+      <EditorNavbar seconds={props.seconds} formatSeconds={props.formatSeconds} />
     </div>
   </div>
 );
