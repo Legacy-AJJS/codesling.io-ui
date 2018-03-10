@@ -23,9 +23,12 @@ class AddChallenge extends Component {
     // testCase.push(input);
     // testCase.push(output);
     // testCase = JSON.stringify(testCase);
-    let ins = JSON.stringify(inputs);
-    let outs = JSON.stringify(outputs);
-
+    let testCases = {};
+    inputs.forEach((inp, i) => {
+      testCases[inp] = outputs[i];
+    });
+    testCases = JSON.stringify(testCases);
+    
     const id = localStorage.getItem('id');
     const body = {
       title,
@@ -33,19 +36,23 @@ class AddChallenge extends Component {
       difficulty,
       user_id: id,
       type: 0,
-      ins,
-      outs
-    }
+      testCases
+    };
     const result = await axios.post('http://localhost:3396/api/challenges', body);
     this.props.history.push('/home');
   }
 
-  handleChallengeInput = (event) => {
+  handleTestCaseInput = (event) => {
     const { value } = event.target;
     const [ name, key ] = event.target.name.split(' ');
     this.state[name][key] = value;
     this.setState({ [name]: this.state[name] });
     console.log(this.state);
+  }
+
+  handleChallengeInput = (event) => {
+    const { value, name } = event.target;
+    this.setState({ [name]: value });
   }
 
   handleAddTestCase = (event) => {
@@ -55,13 +62,13 @@ class AddChallenge extends Component {
       <Input
         name={`inputs ${this.state.testCaseFields.length / 2}`}
         placeholder="enter input"
-        onChange={this.handleChallengeInput}
+        onChange={this.handleTestCaseInput}
         key={this.state.testCaseFields.length / 2 + 1}
       />,
       <Input
         name={`outputs ${this.state.testCaseFields.length / 2}`}
         placeholder="enter expected output"
-        onChange={this.handleChallengeInput}
+        onChange={this.handleTestCaseInput}
         key={(this.state.testCaseFields.length / 2 + 1) * -1}
       />
     );
