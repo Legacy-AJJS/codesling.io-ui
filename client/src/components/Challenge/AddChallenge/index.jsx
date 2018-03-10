@@ -17,12 +17,7 @@ class AddChallenge extends Component {
   submitChallenge = async (e) => {
     e.preventDefault();
     const { title, content, difficulty, inputs, outputs } = this.state;
-
-    // Concact input/output to create testCase
-    // let testCase = [];
-    // testCase.push(input);
-    // testCase.push(output);
-    // testCase = JSON.stringify(testCase);
+    
     let testCases = {};
     inputs.forEach((inp, i) => {
       testCases[inp] = outputs[i];
