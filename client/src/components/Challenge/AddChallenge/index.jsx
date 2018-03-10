@@ -105,6 +105,7 @@ class AddChallenge extends Component {
             placeholder={"enter your difficulty"}
             onChange={this.handleChallengeInput}
           />
+          <br />
           {this.state.testCaseFields.map((testCase) => testCase)}
           <Button
             backgroundColor="red"
