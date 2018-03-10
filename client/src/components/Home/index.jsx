@@ -117,7 +117,7 @@ class Home extends Component {
         />
       <nav className="editor-navbar home-navbar">
         <ul>
-          <li>History</li>
+          <li onClick={() => this.props.history.push('/history')}>History</li>
           <li onClick={() => this.handleLogoutClick()}>Logout</li>
         </ul>
       </nav>
