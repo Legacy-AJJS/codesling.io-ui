@@ -52,7 +52,6 @@ class Sling extends Component {
 
 
     socket.on('server.changed', ({ text, email }) => {
-      console.log(email)
       if (localStorage.getItem('email') === email) {
         this.setState({ ownerText: text });
       } else {
@@ -76,8 +75,6 @@ class Sling extends Component {
         if (email === ownerEmail) {
           alert('Congrats! You Win!')
         } else {
-          console.log(email)
-          console.log(ownerEmail)
           alert('Sorry, you lost!');
           socket.emit('client.recordHistory', {
             challenge: this.state.challenge,
@@ -87,17 +84,9 @@ class Sling extends Component {
           });
         }
       }
-      // still need to implement redirect
-      socket.on('server.disconnect', () => {
-        redirectToHome();
-      });
-
+      //this.props.history.push('/history');
     });
     window.addEventListener('resize', this.setEditorSize);
-  }
-
-  redirectToHome = () => {
-    this.props.history.push('/home');
   }
 
   formatSeconds = (sec) => {
