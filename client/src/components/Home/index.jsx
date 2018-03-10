@@ -72,10 +72,8 @@ class Home extends Component {
     this.props.history.push('/addChallenge');
   }
 
-  handleChallengeSelect = (e) => {
-    e.preventDefault();
-    const { value } = e.target;
-    this.setState({ selectedChallenge: value });
+  handleChallengeSelect = (challenge) => {
+    this.setState({ selectedChallenge: challenge });
   }
 
   handleLogoutClick = () => {
@@ -86,17 +84,12 @@ class Home extends Component {
     this.props.history.push('/');
   }
 
-  handleFriendSelect = (e) => {
-    e.preventDefault();
-    console.log(e.target);
-    const { value } = e.target;
-    this.setState({ selectedFriend: value });
+  handleFriendSelect = (friend) => {
+    this.setState({ selectedFriend: friend });
   }
 
-  handleUserSelect = (e) => {
-    e.preventDefault();
-    const { value } = e.target;
-    this.setState({ selectedUser: JSON.parse(value) });
+  handleUserSelect = (user) => {
+    this.setState({ selectedUser: user });
   }
 
   handleAddFriendClick = async () => {
@@ -129,20 +122,17 @@ class Home extends Component {
         </ul>
       </nav>
         <br />
-        Users:
-        <select onChange={(e) => this.handleUserSelect(e)}>
+        <div>
+          Users:
+        </div>
+        <DropDownMenu value={this.state.selectedUser || this.state.allUsers[0]} >
           {this.state.allUsers.map((user, i) => {
             return (
-            <option
-              value={JSON.stringify(user)}
-              key={i}
-            >
-              {user.username}
-            </option>)
-          }
-          )}
-        </select>
-        <br />
+              <MenuItem value={user} primaryText={user.username} key={i} onClick={this.handleUserSelect.bind(null, user)} />
+            );
+          })}
+        </DropDownMenu>
+
         <br />
         <Button
           backgroundColor="green"
@@ -151,34 +141,30 @@ class Home extends Component {
           onClick={() => this.handleAddFriendClick()}
         />
         <br />
-        Friends:
-        <select onChange={(e) => this.handleFriendSelect(e)}>
+
+        <div>
+          Friends:
+        </div>
+        <DropDownMenu value={this.state.selectedFriend || this.state.allFriends[0]} >
           {this.state.allFriends.map((friend, i) => {
             return (
-            <option
-              value={JSON.stringify(friend)}
-              key={i}
-            >
-              {friend.username}
-            </option>)
-          }
-          )}
-        </select>
+              <MenuItem value={friend} primaryText={friend.username} key={i} onClick={this.handleFriendSelect.bind(null, friend)} />
+            );
+          })}
+        </DropDownMenu>
+
         <br />
         <br />
-        Challenges:
-        <select onChange={(e) => this.handleChallengeSelect(e)}>
+        <div>
+          Challenges:
+        </div>
+        <DropDownMenu value={this.state.selectedChallenge || this.state.allChallenges[0]} >
           {this.state.allChallenges.map((challenge, i) => {
             return (
-            <option
-              value={JSON.stringify(challenge)}
-              key={i}
-            >
-              {challenge.title}
-            </option>)
-          }
-          )}
-        </select>
+              <MenuItem value={challenge} primaryText={challenge.title} key={i} onClick={this.handleChallengeSelect.bind(null, challenge)} />
+            );
+          })}
+        </DropDownMenu>
         <br />
         <br />
         <Button
