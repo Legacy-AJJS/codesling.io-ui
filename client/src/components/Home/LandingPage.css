@@ -3,7 +3,11 @@
 
 .landing-page-logo {
   width: 300px;
-  margin: 50px 0; }
+  margin: 40px 0; }
+
+.home-navbar {
+  border-bottom: 3px solid whitesmoke;
+}
 
 .auth-btn-container button {
   margin-bottom: 20px; }
