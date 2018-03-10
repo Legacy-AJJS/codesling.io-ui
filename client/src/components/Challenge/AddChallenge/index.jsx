@@ -9,22 +9,22 @@ import './Auth.css';
 
 class AddChallenge extends Component {
   state = {
+    testCaseFields: [],
     inputs: [],
-    outputs: [],
-    numInputs: 1,
-    numOutputs: 1
+    outputs: []
    }
 
   submitChallenge = async (e) => {
-
     e.preventDefault();
-    const { title, content, difficulty, input, output } = this.state;
+    const { title, content, difficulty, inputs, outputs } = this.state;
 
     // Concact input/output to create testCase
-    let testCase = [];
-    testCase.push(input);
-    testCase.push(output);
-    testCase = JSON.stringify(testCase);
+    // let testCase = [];
+    // testCase.push(input);
+    // testCase.push(output);
+    // testCase = JSON.stringify(testCase);
+    let ins = JSON.stringify(inputs);
+    let outs = JSON.stringify(outputs);
 
     const id = localStorage.getItem('id');
     const body = {
@@ -33,46 +33,40 @@ class AddChallenge extends Component {
       difficulty,
       user_id: id,
       type: 0,
-      testCase
+      ins,
+      outs
     }
     const result = await axios.post('http://localhost:3396/api/challenges', body);
     this.props.history.push('/home');
   }
 
   handleChallengeInput = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+    const { value } = event.target;
+    const [ name, key ] = event.target.name.split(' ');
+    this.state[name][key] = value;
+    this.setState({ [name]: this.state[name] });
     console.log(this.state);
   }
 
-  handleAddInputClick = (event) => {
+  handleAddTestCase = (event) => {
     event.preventDefault();
-    
-    this.state.inputs.push(
+
+    this.state.testCaseFields.push(
       <Input
-        name={`input${this.state.numInputs}`}
+        name={`inputs ${this.state.testCaseFields.length / 2}`}
         placeholder="enter input"
         onChange={this.handleChallengeInput}
-        key={this.state.numInputs}
-      />
-    );
-
-    this.setState({ inputs: this.state.inputs, numInputs: this.state.numInputs + 1 });
-  }
-
-  handleAddOutputClick = (event) => {
-    event.preventDefault();
-    
-    this.state.outputs.push(
+        key={this.state.testCaseFields.length / 2 + 1}
+      />,
       <Input
-        name={`output${this.state.numOutputs}`}
+        name={`outputs ${this.state.testCaseFields.length / 2}`}
         placeholder="enter expected output"
         onChange={this.handleChallengeInput}
-        key={this.state.numOutputs}
+        key={(this.state.testCaseFields.length / 2 + 1) * -1}
       />
     );
 
-    this.setState({ outputs: this.state.outputs, numOutputs: this.state.numOutputs + 1 });
+    this.setState({ testCaseFields: this.state.testCaseFields });
   }
 
   goToHome = () => {
@@ -90,14 +84,8 @@ class AddChallenge extends Component {
           <Button
             backgroundColor="red"
             color="white"
-            text="Add Input"
-            onClick={(e) => this.handleAddInputClick(e)}
-          />
-          <Button
-            backgroundColor="red"
-            color="white"
-            text="Add Expected Output"
-            onClick={(e) => this.handleAddOutputClick(e)}
+            text="Add Test Case"
+            onClick={(e) => this.handleAddTestCase(e)}
           />
           <Input
             name="title"
@@ -115,18 +103,7 @@ class AddChallenge extends Component {
             placeholder={"enter your difficulty"}
             onChange={this.handleChallengeInput}
           />
-          <Input
-            name="input0"
-            placeholder="enter input"
-            onChange={this.handleChallengeInput}
-          />
-          {this.state.inputs.map((input) => input)}
-          <Input
-            name="output0"
-            placeholder="enter expected output"
-            onChange={this.handleChallengeInput}
-          />
-          {this.state.outputs.map((output) => output)}
+          {this.state.testCaseFields.map((testCase) => testCase)}
           <Button
             backgroundColor="red"
             color="white"
