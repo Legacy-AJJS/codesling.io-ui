@@ -45,10 +45,15 @@ class AddChallenge extends Component {
     this.setState({ [name]: value });
   }
 
+  goToHome = () => {
+    this.props.history.push('/home');
+  }
+
   render() {
     return (
       <div className="login-form-container">
         <Logo
+          goToHome={this.goToHome.bind(this)}
           className="landing-page-logo"
         />
         <form className="auth-form">

@@ -25,6 +25,7 @@ class Sling extends Component {
       stdout: '',
       secondsElapsed: 0,
     }
+    this.postHistory.bind(this);
   }
 
   componentDidMount() {
@@ -38,6 +39,7 @@ class Sling extends Component {
     socket.on('connect', () => {
       socket.emit('client.ready', startChall);
     });
+
     
     socket.on('server.initialState', ({ id, text, challenge }) => {
       this.setState({
@@ -48,8 +50,8 @@ class Sling extends Component {
       });
     });
 
+
     socket.on('server.changed', ({ text, email }) => {
-      console.log('true', localStorage.getItem('email'));
       if (localStorage.getItem('email') === email) {
         this.setState({ ownerText: text });
       } else {
@@ -62,26 +64,61 @@ class Sling extends Component {
 
       if (email === ownerEmail) {
         this.setState({ stdout });
+      }
 
-        // Take out empty new lines from console output.
-        const lines = stdout.split('\n');
-        lines.forEach((line, i) => {
-          if (line === '') lines.splice(i, 1);
-        });
-        console.log(lines);
-        // Alert user of win condition.
-        if (lines[lines.length - 1] === 'SUCCESS') {
-          alert('Congrats! You Win!');
+      const lines = stdout.split('\n');
+      lines.forEach((line, i) => {
+        if (line === '') lines.splice(i, 1);
+      });
+
+      if (lines[lines.length - 1] === 'SUCCESS') {
+        if (email === ownerEmail) {
+          alert('Congrats! You Win!')
+        } else {
+          console.log(email)
+          console.log(ownerEmail)
+          alert('Sorry, you lost!');
+          socket.emit('client.recordHistory', {
+            challenge: this.state.challenge,
+            winner: email, 
+            loser: ownerEmail,
+            time: this.state.secondsElapsed
+          });
         }
       }
-    });
+      // still need to implement redirect
+      socket.on('server.disconnect', () => {
+        redirectToHome();
+      });
 
+    });
     window.addEventListener('resize', this.setEditorSize);
+  }
+
+  redirectToHome = () => {
+    this.props.history.push('/home');
   }
 
   formatSeconds = (sec) => {
     return `${Math.floor(sec/60)}:${('0' + (sec % 60)).slice(-2)}`
+    
   };
+
+  postHistory = (outcome, challenger_id) => {
+    console.log('im getting called')
+    console.log(this.props.challenge)
+    let body = { 
+                outcome: outcome,  
+                time: this.state.secondsElapsed,
+                clout: 0,
+                user_id: localStorage.id,
+                challenger_id: challenger_id,
+                challenge_id: this.state.challenge.id
+                }
+    axios.post(`http://localhost:3396/api/history/addHistory`, body, () => {
+      console.log('stored');
+    });
+  }
 
   submitCode = () => {
     const { socket } = this.props;
