@@ -32,6 +32,7 @@ class Sling extends Component {
       endMessage: ''
     }
     this.postHistory.bind(this);
+    this.formatSeconds.bind(this);
   }
 
   componentDidMount() {
@@ -162,10 +163,9 @@ class Sling extends Component {
         onClick={this.handleClose}
       />,
       <FlatButton
-        label="Submit"
+        label="Go Home"
         primary={true}
-        disabled={true}
-        onClick={this.handleClose}
+        onClick={this.props.goToHome}
       />,
     ];
 
@@ -173,7 +173,7 @@ class Sling extends Component {
 
       <div className="sling-container">
         <div>
-          <RaisedButton label="Modal Dialog" onClick={this.handleOpen} />
+          {/* <RaisedButton label="Modal Dialog" onClick={this.handleOpen} /> */}
           <Dialog
             title={this.state.endMessage}
             actions={actions}
@@ -184,8 +184,7 @@ class Sling extends Component {
         </div>
 
 
-        {this.formatSeconds(this.state.secondsElapsed)}
-        <EditorHeader goToHome={this.props.goToHome} />
+        <EditorHeader goToHome={this.props.goToHome} seconds={this.state.secondsElapsed} formatSeconds={this.formatSeconds}/>
         <div className="code1-editor-container">
           <CodeMirror
             editorDidMount={this.initializeEditor}
@@ -207,13 +206,6 @@ class Sling extends Component {
             className="run-btn"
             text="Run Code"
             backgroundColor="red"
-            color="white"
-            onClick={() => this.submitCode()}
-          />
-          <Button
-            className="run-btn"
-            text="Submit Code"
-            backgroundColor="green"
             color="white"
             onClick={() => this.submitCode()}
           />
